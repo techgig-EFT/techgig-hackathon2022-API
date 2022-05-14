@@ -12,12 +12,16 @@ database = 'employee'
 username = 'techgig@employeemgr'
 password = 'gigtech@1234'   
 driver= '{ODBC Driver 18 for SQL Server}'
-conn=  pyodbc.connect('DRIVER='+driver+';SERVER=tcp:'+server+';PORT=1433;DATABASE='+database+';UID='+username+';PWD='+ password)
 connection_string = "DefaultEndpointsProtocol=https;AccountName=sqlvaexw675lswetoy;AccountKey=cD7BCVR3xJtdA2IxLd5q4ezmobMbUlaBEvE9/gx3ms8ZGJxNfGOrHcxqHGtxVrGbfyUH+RQ80IeI+AStTqBJSQ==;EndpointSuffix=core.windows.net"
 service = BlobServiceClient.from_connection_string(conn_str=connection_string)
+@app.route('/',methods = ['POST', 'GET'])
+@cross_origin(supports_credentials=True)
+def healthCheck():
+    return "Hello from flask"
 @app.route('/get-employee-details',methods = ['POST', 'GET'])
 @cross_origin(supports_credentials=True)
 def getEmployeeDetails():
+    conn=  pyodbc.connect('DRIVER='+driver+';SERVER=tcp:'+server+';PORT=1433;DATABASE='+database+';UID='+username+';PWD='+ password)
     cursor=conn.cursor()
     cursor.execute("SELECT * from employee_details")
     columns = [column[0] for column in cursor.description]
@@ -30,6 +34,7 @@ def getEmployeeDetails():
 @cross_origin(supports_credentials=True)
 def addEmployeeDetails():
     if request.method == 'POST':
+        conn=  pyodbc.connect('DRIVER='+driver+';SERVER=tcp:'+server+';PORT=1433;DATABASE='+database+';UID='+username+';PWD='+ password)
         details=request.json
         empid=int(details.get("empid"))
         name=details.get("name")
@@ -50,6 +55,7 @@ def addEmployeeDetails():
 @cross_origin(supports_credentials=True)
 def updateEmployeeDetails():
     if request.method == 'POST':
+        conn=  pyodbc.connect('DRIVER='+driver+';SERVER=tcp:'+server+';PORT=1433;DATABASE='+database+';UID='+username+';PWD='+ password)
         details=request.json
         empid=details.get("empid")
         preferredNameDefault=details.get("preferredNameDefault")
@@ -72,6 +78,7 @@ def updateEmployeeDetails():
 @cross_origin(supports_credentials=True)
 def addPronunciation():
     if request.method == 'POST':
+        conn=  pyodbc.connect('DRIVER='+driver+';SERVER=tcp:'+server+';PORT=1433;DATABASE='+database+';UID='+username+';PWD='+ password)
         details=request.form
         recorded_blob=request.files.get("blob")
         print(details)
@@ -98,6 +105,7 @@ def addPronunciation():
 @cross_origin(supports_credentials=True)
 def removePronunciation():
     if request.method == 'POST':
+        conn=  pyodbc.connect('DRIVER='+driver+';SERVER=tcp:'+server+';PORT=1433;DATABASE='+database+';UID='+username+';PWD='+ password)
         details=request.json
         empid=details.get("empid")
         cursor=conn.cursor()

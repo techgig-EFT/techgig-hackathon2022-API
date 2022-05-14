@@ -1,0 +1,6 @@
+azure.cognitiveservices.speech
+flask
+virtualenv
+flask_cors
+azure.storage.blob
+pyodbc
