@@ -13,7 +13,7 @@ username = 'techgig@employeemgr'
 password = 'gigtech@1234'   
 driver= '{ODBC Driver 17 for SQL Server}'
 connection_string = "DefaultEndpointsProtocol=https;AccountName=sqlvaexw675lswetoy;AccountKey=cD7BCVR3xJtdA2IxLd5q4ezmobMbUlaBEvE9/gx3ms8ZGJxNfGOrHcxqHGtxVrGbfyUH+RQ80IeI+AStTqBJSQ==;EndpointSuffix=core.windows.net"
-service = BlobServiceClient.from_connection_string(conn_str=connection_string)
+
 @app.route('/',methods = ['POST', 'GET'])
 @cross_origin(supports_credentials=True)
 def healthCheck():
@@ -78,6 +78,7 @@ def updateEmployeeDetails():
 @cross_origin(supports_credentials=True)
 def addPronunciation():
     if request.method == 'POST':
+        service = BlobServiceClient.from_connection_string(conn_str=connection_string)
         conn=  pyodbc.connect('DRIVER='+driver+';SERVER=tcp:'+server+';PORT=1433;DATABASE='+database+';UID='+username+';PWD='+ password)
         details=request.form
         recorded_blob=request.files.get("blob")
@@ -105,9 +106,14 @@ def addPronunciation():
 @cross_origin(supports_credentials=True)
 def removePronunciation():
     if request.method == 'POST':
+        service = BlobServiceClient.from_connection_string(conn_str=connection_string) 
         conn=  pyodbc.connect('DRIVER='+driver+';SERVER=tcp:'+server+';PORT=1433;DATABASE='+database+';UID='+username+';PWD='+ password)
         details=request.json
-        empid=details.get("empid")
+        empid=details.get("empid") 
+        blob_client = service.get_blob_client(container="vulnerability-assessment",blob=empid+"_default.wav") 
+        blob_client.delete_blob()
+        blob_client = service.get_blob_client(container="vulnerability-assessment",blob=empid+"_preferred.wav") 
+        blob_client.delete_blob()
         cursor=conn.cursor()
         cursor.execute("UPDATE dbo.employee_details SET  pronunciation='%s',preferred_name_pronunciation='%s', recordedPronunciation='%d' where empid='%s'"%('','',0,empid))
         conn.commit()
