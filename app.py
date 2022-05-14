@@ -38,6 +38,7 @@ def addEmployeeDetails():
         empid=int(details.get("empid"))
         name=details.get("name")
         location=details.get("location")
+        country=details.get("country")
         contact=details.get("contact")
         gender=details.get("gender")
         performance=int(details.get("performance"))
@@ -46,7 +47,7 @@ def addEmployeeDetails():
         phonetic=details.get("phonetic")
         preferredNameDefault=details.get("preferredNameDefault")
         cursor=conn.cursor()
-        cursor.execute("INSERT into employee_details (empid,empname,location,contact,gender,performance,notes,preferredName,phonetic,preferredNameDefault,recordedPronunciation) values ('%d','%s','%s','%s','%s','%d','%s','%s','%s','%d','%d')"%(empid,name,location,contact,gender,performance,notes,preferredName,phonetic,preferredNameDefault, 0))
+        cursor.execute("INSERT into employee_details (empid,empname,location,country,contact,gender,performance,notes,preferredName,phonetic,preferredNameDefault,recordedPronunciation) values ('%d','%s','%s','%s','%s','%s','%d','%s','%s','%s','%d','%d')"%(empid,name,location,country,contact,gender,performance,notes,preferredName,phonetic,preferredNameDefault, 0))
         conn.commit()
     return {"message":'Success'}
 
