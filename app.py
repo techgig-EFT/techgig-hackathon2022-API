@@ -11,7 +11,7 @@ server = 'employeemgr.database.windows.net'
 database = 'employee'
 username = 'techgig@employeemgr'
 password = 'gigtech@1234'   
-driver= '{ODBC Driver 18 for SQL Server}'
+driver= '{ODBC Driver 17 for SQL Server}'
 connection_string = "DefaultEndpointsProtocol=https;AccountName=sqlvaexw675lswetoy;AccountKey=cD7BCVR3xJtdA2IxLd5q4ezmobMbUlaBEvE9/gx3ms8ZGJxNfGOrHcxqHGtxVrGbfyUH+RQ80IeI+AStTqBJSQ==;EndpointSuffix=core.windows.net"
 service = BlobServiceClient.from_connection_string(conn_str=connection_string)
 @app.route('/',methods = ['POST', 'GET'])
@@ -19,7 +19,6 @@ service = BlobServiceClient.from_connection_string(conn_str=connection_string)
 def healthCheck():
     return "Hello from flask"
 @app.route('/get-employee-details',methods = ['POST', 'GET'])
-@cross_origin(supports_credentials=True)
 def getEmployeeDetails():
     conn=  pyodbc.connect('DRIVER='+driver+';SERVER=tcp:'+server+';PORT=1433;DATABASE='+database+';UID='+username+';PWD='+ password)
     cursor=conn.cursor()
