@@ -40,6 +40,7 @@ def addEmployeeDetails():
         location=details.get("location")
         country=details.get("country")
         contact=details.get("contact")
+        email=details.get("email")
         gender=details.get("gender")
         performance=int(details.get("performance"))
         notes=details.get("notes")
@@ -47,7 +48,7 @@ def addEmployeeDetails():
         phonetic=details.get("phonetic")
         preferredNameDefault=details.get("preferredNameDefault")
         cursor=conn.cursor()
-        cursor.execute("INSERT into employee_details (empid,empname,location,country,contact,gender,performance,notes,preferredName,phonetic,preferredNameDefault,recordedPronunciation) values ('%d','%s','%s','%s','%s','%s','%d','%s','%s','%s','%d','%d')"%(empid,name,location,country,contact,gender,performance,notes,preferredName,phonetic,preferredNameDefault, 0))
+        cursor.execute("INSERT into employee_details (empid,empname,location,country,contact,email,gender,performance,notes,preferredName,phonetic,preferredNameDefault,recordedPronunciation) values ('%d','%s','%s','%s','%s','%s','%s','%d','%s','%s','%s','%d','%d')"%(empid,name,location,country,contact,email,gender,performance,notes,preferredName,phonetic,preferredNameDefault, 0))
         conn.commit()
     return {"message":'Success'}
 
@@ -105,19 +106,18 @@ def addPronunciation():
 @app.route('/remove-pronunciation',methods = ['POST', 'GET'])
 @cross_origin(supports_credentials=True)
 def removePronunciation():
-    if request.method == 'POST':
-        service = BlobServiceClient.from_connection_string(conn_str=connection_string) 
-        conn=  pyodbc.connect('DRIVER='+driver+';SERVER=tcp:'+server+';PORT=1433;DATABASE='+database+';UID='+username+';PWD='+ password)
-        details=request.json
-        empid=details.get("empid") 
-        blob_client = service.get_blob_client(container="vulnerability-assessment",blob=empid+"_default.wav") 
-        blob_client.delete_blob()
-        blob_client = service.get_blob_client(container="vulnerability-assessment",blob=empid+"_preferred.wav") 
-        blob_client.delete_blob()
-        cursor=conn.cursor()
-        cursor.execute("UPDATE dbo.employee_details SET  pronunciation='%s',preferred_name_pronunciation='%s', recordedPronunciation='%d' where empid='%s'"%('','',0,empid))
-        conn.commit()
-        return {"message":'Success'}
+    try:
+        if request.method == 'POST':
+            service = BlobServiceClient.from_connection_string(conn_str=connection_string) 
+            conn=  pyodbc.connect('DRIVER='+driver+';SERVER=tcp:'+server+';PORT=1433;DATABASE='+database+';UID='+username+';PWD='+ password)
+            details=request.json
+            empid=details.get("empid") 
+            cursor=conn.cursor()
+            cursor.execute("UPDATE dbo.employee_details SET  pronunciation='%s',preferred_name_pronunciation='%s', recordedPronunciation='%d' where empid='%s'"%('','',0,empid))
+            conn.commit()
+            return {"message":'Success'}
+    except:
+        print("No blob found")
     return {"message":'Failure'}
 
 @app.route('/get-pronunciation',methods = ['POST', 'GET'])
