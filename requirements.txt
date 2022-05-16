@@ -4,3 +4,4 @@ virtualenv
 flask_cors
 azure.storage.blob
 pyodbc
+pytest

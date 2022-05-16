@@ -17,7 +17,7 @@ connection_string = "DefaultEndpointsProtocol=https;AccountName=sqlvaexw675lswet
 @app.route('/',methods = ['POST', 'GET'])
 @cross_origin(supports_credentials=True)
 def healthCheck():
-    return "Hello from flask"
+    return {"message":"Hello from flask"}
 @app.route('/get-employee-details',methods = ['POST', 'GET'])
 def getEmployeeDetails():
     conn=  pyodbc.connect('DRIVER='+driver+';SERVER=tcp:'+server+';PORT=1433;DATABASE='+database+';UID='+username+';PWD='+ password)
