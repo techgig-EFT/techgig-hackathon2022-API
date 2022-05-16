@@ -60,4 +60,4 @@ jobs:
         with:
           app-name: 'name-pronunciation-api'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_17E34557FEEB4F80BF302891C966187A }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_E6AF1093C754440DB1B4C883AF7ACF67 }}
